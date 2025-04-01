@@ -49,9 +49,36 @@ module.exports = (req, res) => {
       });
     }
   }
+  
+  if (req.method === 'GET') {
+    try {
+      const { data } = req.query;
+      
+      if (!data) {
+        return res.status(400).json({ 
+          error: true, 
+          message: '请提供友链数据，例如：/api/convert?data=友链数据' 
+        });
+      }
+      
+      // 对URL参数进行解码
+      const decodedData = decodeURIComponent(data);
+      const convertedData = convertBlogLink(decodedData);
+      
+      return res.json({
+        success: true,
+        data: convertedData
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: error.message
+      });
+    }
+  }
 
   return res.status(200).json({
-    message: '请使用POST请求发送友链数据',
+    message: '请使用GET请求(?data=友链数据)或POST请求发送友链数据',
     author: 'luoy-oss',
     website: 'https://www.drluo.top',
     github: 'https://www.github.com/luoy-oss'
