@@ -25,8 +25,9 @@ app.get('/', (req, res) => {
     <p>请使用以下方式进行友链数据转换</p>
     <p>1. 使用POST请求发送原始友链数据到 /api/convert 端口</p>
     <p>2. 使用GET请求：/api/convert?data=友链数据</p>
-    <p>项目作者: <a href="https://www.drluo.top" target="_blank">luoy-oss</a></p>
     <p>GitHub: <a href="https://www.github.com/luoy-oss" target="_blank">luoy-oss</a></p>
+    <p>GitHub仓库: <a href="https://github.com/luoy-oss/blog-link-converter" target="_blank">blog-link-converter</a></p>
+    <p>作者主页: <a href="https://www.drluo.top" target="_blank">drluo.top</a></p>
   `);
 });
 
