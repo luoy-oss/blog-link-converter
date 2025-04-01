@@ -1,0 +1,26 @@
+{
+  "name": "blog-link-converter",
+  "version": "1.0.0",
+  "description": "将不同样式的博客友链转换为统一格式",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "blog",
+    "links",
+    "converter",
+    "vercel"
+  ],
+  "author": "luoy-oss <2557657882@qq.com> (https://www.drluo.top)",
+  "homepage": "https://www.github.com/luoy-oss/blog-link-converter",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
