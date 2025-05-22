@@ -31,57 +31,8 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.post('/api/convert', (req, res) => {
-  try {
-    const { data } = req.body;
-    
-    if (!data) {
-      return res.status(400).json({ 
-        error: true, 
-        message: '请提供友链数据' 
-      });
-    }
-    
-    const convertedData = convertBlogLink(data);
-    
-    res.json({
-      success: true,
-      data: convertedData
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: true,
-      message: error.message
-    });
-  }
-});
-
-app.get('/api/convert', (req, res) => {
-  try {
-    const { data } = req.query;
-    
-    if (!data) {
-      return res.status(400).json({ 
-        error: true, 
-        message: '请提供友链数据，例如：/api/convert?data=友链数据' 
-      });
-    }
-    
-    // 对URL参数进行解码
-    const decodedData = decodeURIComponent(data);
-    const convertedData = convertBlogLink(decodedData);
-    
-    res.json({
-      success: true,
-      data: convertedData
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: true,
-      message: error.message
-    });
-  }
-});
+const convertRouter = require('./api/convert');
+app.use('/api/convert', convertRouter);
 
 app.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
