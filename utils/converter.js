@@ -202,14 +202,18 @@ function convertBlogLink(rawData) {
  */
 function extractJsonFields(jsonData, result) {
   if (jsonData.title || jsonData.name) result.title = jsonData.title || jsonData.name;
-  if (jsonData.screenshot || jsonData.siteshot) result.screenshot = jsonData.screenshot || jsonData.siteshot;
-  if (jsonData.url || jsonData.link) result.url = jsonData.url || jsonData.link;
-  if (jsonData.avatar || jsonData.image) result.avatar = jsonData.avatar || jsonData.image;
-  if (jsonData.description || jsonData.descr || jsonData.intro) {
-    result.description = jsonData.description || jsonData.descr || jsonData.intro;
+  if (jsonData.screenshot || jsonData.siteshot || jsonData.cover || jsonData.banner || jsonData.poster) {
+    result.screenshot = jsonData.screenshot || jsonData.siteshot || jsonData.cover || jsonData.banner || jsonData.poster;
   }
-  if (jsonData.keywords || jsonData.group) {
-    const groupValue = jsonData.keywords || jsonData.group;
+  if (jsonData.url || jsonData.link || jsonData.siteurl) result.url = jsonData.url || jsonData.link || jsonData.siteurl;
+  if (jsonData.avatar || jsonData.image || jsonData.img || jsonData.imgurl || jsonData.pic || jsonData.picture || jsonData.logo) {
+    result.avatar = jsonData.avatar || jsonData.image || jsonData.img || jsonData.imgurl || jsonData.pic || jsonData.picture || jsonData.logo;
+  }
+  if (jsonData.description || jsonData.descr || jsonData.intro || jsonData.desc) {
+    result.description = jsonData.description || jsonData.descr || jsonData.intro || jsonData.desc;
+  }
+  if (jsonData.keywords || jsonData.group || jsonData.tags || jsonData.tag) {
+    const groupValue = jsonData.keywords || jsonData.group || jsonData.tags || jsonData.tag;
     result.keywords = (groupValue && typeof groupValue === 'string') ? groupValue : "";
   }
 }
@@ -221,8 +225,9 @@ function extractJsonFields(jsonData, result) {
  * @param {Object} result - 标准格式结果对象
  */
 function mapFieldToStandardFormat(key, value, result) {
-  // 多余空格移除，转小写
-  const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '');
+  // 移除方括号及其内容，多余空格移除，转小写
+  const normalizedKey = key.replace(/\[.*?\]/g, '').replace(/（.*?）/g, '')
+    .trim().toLowerCase().replace(/\s+/g, '');
   // console.log(`键名: ${normalizedKey}, 值: ${value}`);
   
   if (normalizedKey.includes('name') || normalizedKey.includes('title') || normalizedKey.includes('站点名称') || 
@@ -230,8 +235,17 @@ function mapFieldToStandardFormat(key, value, result) {
       normalizedKey === '站名') {
     if (!result.title) result.title = value;
   } 
+  else if (normalizedKey.includes('avatar') || normalizedKey.includes('image') || 
+           normalizedKey.includes('站长头像') || normalizedKey.includes('头像') || 
+           normalizedKey.includes('图标') || normalizedKey.includes('标志') ||
+           normalizedKey.includes('img') || normalizedKey.includes('pic') || 
+           normalizedKey.includes('picture') || normalizedKey.includes('logo')) {
+    if (!result.avatar) result.avatar = value;
+  } 
   else if (normalizedKey.includes('screenshot') || normalizedKey.includes('siteshot') || 
-           normalizedKey.includes('站点截图') || normalizedKey.includes('预览图')) {
+           normalizedKey.includes('站点截图') || normalizedKey.includes('预览图') ||
+           normalizedKey.includes('cover') || normalizedKey.includes('banner') || 
+           normalizedKey.includes('poster') || normalizedKey.includes('封面')) {
     if (!result.screenshot) result.screenshot = value;
   } 
   else if (normalizedKey.includes('url') || normalizedKey.includes('link') || 
@@ -239,12 +253,7 @@ function mapFieldToStandardFormat(key, value, result) {
            normalizedKey.includes('链接') || normalizedKey.includes('地址')) {
     if (!result.url) result.url = value;
   } 
-  else if (normalizedKey.includes('avatar') || normalizedKey.includes('image') || 
-           normalizedKey.includes('站长头像') || normalizedKey.includes('头像') || 
-           normalizedKey.includes('图标') || normalizedKey.includes('标志')) {
-    if (!result.avatar) result.avatar = value;
-  } 
-  else if (normalizedKey.includes('description') || normalizedKey.includes('descr') || 
+  else if (normalizedKey.includes('description') || normalizedKey.includes('desc') || 
            normalizedKey.includes('intro') || normalizedKey.includes('站点描述') || 
            normalizedKey.includes('简介') || normalizedKey.includes('一句话描述') || 
            normalizedKey === '描述') {
@@ -252,7 +261,8 @@ function mapFieldToStandardFormat(key, value, result) {
   } 
   else if (normalizedKey.includes('keywords') || normalizedKey.includes('group') || 
            normalizedKey.includes('站点关键词') || normalizedKey.includes('关键词') || 
-           normalizedKey.includes('博客主题')) {
+           normalizedKey.includes('博客主题') || normalizedKey.includes('tags') || 
+           normalizedKey.includes('tag') || normalizedKey.includes('标签')) {
     if (!result.keywords) result.keywords = value;
   }
 }

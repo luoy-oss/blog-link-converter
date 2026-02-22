@@ -1,3 +1,6 @@
+# 调试文件
+reproduce_issue.js
+
 # 依赖目录
 node_modules/
 npm-debug.log
